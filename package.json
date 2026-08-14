@@ -1,0 +1,99 @@
+{
+  "name": "@zkp2p/wdk-protocol-fiat-peer",
+  "version": "0.1.0",
+  "description": "Peer Cash fiat off-ramp protocol for Tether WDK",
+  "keywords": [
+    "wdk",
+    "tether",
+    "peer",
+    "fiat",
+    "offramp",
+    "usdc",
+    "base"
+  ],
+  "license": "MIT",
+  "author": "P2P Labs Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkp2p/wdk-protocol-fiat-peer.git"
+  },
+  "homepage": "https://github.com/zkp2p/wdk-protocol-fiat-peer#readme",
+  "bugs": "https://github.com/zkp2p/wdk-protocol-fiat-peer/issues",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "browser": {
+        "import": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.browser.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+          "default": "./dist/index.browser.cjs"
+        }
+      },
+      "node": {
+        "import": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.node.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+          "default": "./dist/index.node.cjs"
+        }
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome lint .",
+    "format": "biome format . --write",
+    "check": "biome check .",
+    "typecheck": "tsc --noEmit",
+    "validate": "npm run check && npm run typecheck && npm run test && npm run build && npm run validate:exports",
+    "validate:exports": "publint && npm run validate:types && npm run validate:runtime",
+    "validate:types": "tsc --ignoreConfig --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext tests/consumer.ts",
+    "validate:runtime": "node tests/exports.cjs && node tests/exports.mjs",
+    "prepublishOnly": "npm run validate"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "@tetherto/wdk-wallet": "1.0.0-beta.15",
+    "@zkp2p/cash": "0.4.9",
+    "bignumber.js": "9.3.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.14",
+    "@types/node": "25.6.0",
+    "@vitest/coverage-v8": "4.1.5",
+    "publint": "0.3.18",
+    "tsdown": "0.21.10",
+    "typescript": "6.0.3",
+    "vitest": "4.1.5"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "sideEffects": false
+}
