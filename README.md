@@ -1,4 +1,4 @@
-# @zkp2p/wdk-protocol-fiat-peer
+# wdk-protocol-fiat-peer
 
 Peer Cash for Tether WDK. The module implements WDK's `IFiatProtocol` for cashing out Base USDC to supported fiat payment platforms at the live oracle rate.
 
@@ -7,13 +7,13 @@ Peer Cash is off-ramp only. `quoteBuy()` and `buy()` reject with a typed `unsupp
 ## Install
 
 ```sh
-npm install @zkp2p/wdk-protocol-fiat-peer
+npm install wdk-protocol-fiat-peer
 ```
 
 ## Quote a cash-out
 
 ```ts
-import PeerFiatProtocol from '@zkp2p/wdk-protocol-fiat-peer';
+import PeerFiatProtocol from 'wdk-protocol-fiat-peer';
 
 const fiat = new PeerFiatProtocol(account);
 

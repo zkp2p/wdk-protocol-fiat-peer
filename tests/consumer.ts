@@ -1,8 +1,4 @@
-import PeerFiatProtocol, {
-  type IFiatProtocol,
-  type PeerFiatQuote,
-  type PeerSellResult,
-} from '@zkp2p/wdk-protocol-fiat-peer';
+import PeerFiatProtocol, { type IFiatProtocol, type PeerFiatQuote, type PeerSellResult } from 'wdk-protocol-fiat-peer';
 
 const protocol: IFiatProtocol = new PeerFiatProtocol();
 const quote: Promise<PeerFiatQuote> = new PeerFiatProtocol().quoteSell({

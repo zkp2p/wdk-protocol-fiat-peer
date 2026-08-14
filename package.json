@@ -1,5 +1,5 @@
 {
-  "name": "@zkp2p/wdk-protocol-fiat-peer",
+  "name": "wdk-protocol-fiat-peer",
   "version": "0.1.0",
   "description": "Peer Cash fiat off-ramp protocol for Tether WDK",
   "keywords": [
