@@ -158,9 +158,17 @@ export class PeerFiatProtocol extends FiatProtocol {
   }
 
   private static validateAppUrl(value: string): string {
-    const url = new URL(value);
-    if (url.protocol !== 'https:' && url.hostname !== 'localhost') {
-      throw new PeerFiatError('invalid_argument', 'appUrl must use HTTPS');
+    let url: URL;
+    try {
+      url = new URL(value);
+    } catch {
+      throw new PeerFiatError('invalid_argument', 'appUrl must be a valid URL');
+    }
+    const localHttp =
+      url.protocol === 'http:' &&
+      (url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '[::1]');
+    if (url.protocol !== 'https:' && !localHttp) {
+      throw new PeerFiatError('invalid_argument', 'appUrl must use HTTPS, except for local development');
     }
     return url.toString();
   }
@@ -177,6 +185,9 @@ export class PeerFiatProtocol extends FiatProtocol {
         'unsupported_operation',
         'Peer Cash requires an exact Base USDC cryptoAmount; exact fiat targets are not supported',
       );
+    }
+    if (typeof options.cryptoAmount === 'number' && !Number.isSafeInteger(options.cryptoAmount)) {
+      throw new PeerFiatError('invalid_argument', 'cryptoAmount must be a safe integer in USDC base units');
     }
     const amount = BigInt(options.cryptoAmount);
     if (amount <= 0n) {

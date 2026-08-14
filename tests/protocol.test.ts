@@ -216,5 +216,22 @@ describe('PeerFiatProtocol', () => {
 
   it('uses typed errors', () => {
     expect(() => new PeerFiatProtocol(undefined, { appUrl: 'http://example.com' })).toThrow(PeerFiatError);
+    expect(() => new PeerFiatProtocol(undefined, { appUrl: 'ftp://localhost/cash' })).toThrow(PeerFiatError);
+    expect(() => new PeerFiatProtocol(undefined, { appUrl: 'not a url' })).toThrow(PeerFiatError);
+    expect(() => new PeerFiatProtocol(undefined, { appUrl: 'http://localhost:3000/cash' })).not.toThrow();
+  });
+
+  it('rejects unsafe numeric base-unit amounts with a typed error', async () => {
+    const protocol = new PeerFiatProtocol();
+    await expect(
+      protocol.quoteSell({
+        cryptoAsset: 'usdc',
+        fiatCurrency: 'USD',
+        cryptoAmount: Number.MAX_SAFE_INTEGER + 1,
+      }),
+    ).rejects.toMatchObject({
+      name: 'PeerFiatError',
+      code: 'invalid_argument',
+    });
   });
 });

@@ -3,3 +3,5 @@ dist
 coverage
 *.tgz
 .DS_Store
+firebase-debug.log
+pglite-debug.log
