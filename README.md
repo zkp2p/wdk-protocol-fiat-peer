@@ -52,7 +52,7 @@ for (const [index, transaction] of result.prepared?.txs.entries() ?? []) {
 }
 ```
 
-The WDK host must inspect, sign, and submit `prepared.txs` in order. The module never accepts a private key or broadcasts a transaction. If `prepared.accessPolicyRequired` is true, finalize the confirmed create-deposit receipt with `@zkp2p/cash`, then prepare and submit its access-policy transaction.
+The WDK host must inspect, sign, and submit `prepared.txs` in order. The module never accepts a private key or broadcasts a transaction. If `prepared.accessPolicyRequired` is true, finalize the confirmed create-deposit receipt with `@zkp2p/cash`, then call `prepareAccessPolicy(depositId, paymentMethod)` for every hash in `prepared.accessPolicyPaymentMethods`. Submit and confirm each policy transaction with the depositor.
 
 Some payout platforms require a pre-existing verified payee. For those platforms, a new bare handle returns the SDK's `PAYEE_VERIFICATION_REQUIRED` error; pass prepared curator payee data or complete verification in the Peer app.
 

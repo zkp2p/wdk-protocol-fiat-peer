@@ -66,6 +66,7 @@ export interface PeerPrepareResult {
   steps: PeerPreparedStep[];
   register: { hashedOnchainIds: string[] };
   accessPolicyRequired: boolean;
+  accessPolicyPaymentMethods: `0x${string}`[];
 }
 
 export type PeerOrderState = 'awaiting-buyer' | 'matched' | 'delivering' | 'delivered' | 'returned';

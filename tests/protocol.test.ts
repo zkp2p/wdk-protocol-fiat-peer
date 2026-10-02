@@ -58,6 +58,7 @@ const prepared: PrepareResult = {
   steps: [],
   register: { hashedOnchainIds: ['0x01'] },
   accessPolicyRequired: false,
+  accessPolicyPaymentMethods: [],
 };
 
 function order(state: CashOrder['state']): CashOrder {
