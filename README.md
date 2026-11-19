@@ -7,7 +7,7 @@ Peer Cash is off-ramp only. `quoteBuy()` and `buy()` reject with a typed `unsupp
 ## Install
 
 ```sh
-npm install wdk-protocol-fiat-peer
+npm install wdk-protocol-fiat-peer@0.1.1
 ```
 
 ## Quote a cash-out
@@ -30,7 +30,7 @@ quote.rate;
 quote.metadata;
 ```
 
-Amounts follow the WDK contract: `cryptoAmount` is in Base USDC base units and `fiatAmount` is in the fiat currency's minor unit. A quote is an oracle estimate, not a locked rate. The binding rate is the live oracle rate when a buyer fills the order.
+Supply a positive `cryptoAmount` in Base USDC base units (six decimals). The adapter reports `fiatAmount` with two decimals for every supported currency and rounds down. Each buyer locks their oracle rate when they signal an intent.
 
 ## Prepare a cash-out
 
@@ -52,7 +52,7 @@ for (const [index, transaction] of result.prepared?.txs.entries() ?? []) {
 }
 ```
 
-The WDK host must inspect, sign, and submit `prepared.txs` in order. The module never accepts a private key or broadcasts a transaction. If `prepared.accessPolicyRequired` is true, finalize the confirmed create-deposit receipt with `@zkp2p/cash`, then call `prepareAccessPolicy(depositId, paymentMethod)` for every hash in `prepared.accessPolicyPaymentMethods`. Submit and confirm each policy transaction with the depositor.
+The published adapter pins `@zkp2p/cash@0.4.9`. Inspect the prepared result before signing anything. If `prepared.accessPolicyRequired` is true, use the hosted Peer cash-out flow instead: that plan depends on a retired group policy. For other plans, the host signs and submits the transactions in order, confirms each receipt, and passes the create-deposit receipt to `finalizePreparedCashout()` on a Cash 0.4.9 client to recover the deposit ID.
 
 Some payout platforms require a pre-existing verified payee. For those platforms, a new bare handle returns the SDK's `PAYEE_VERIFICATION_REQUIRED` error; pass prepared curator payee data or complete verification in the Peer app.
 
@@ -78,10 +78,10 @@ Peer states map to WDK as follows:
 ## Supported surface
 
 - Asset: USDC on Base, 6 decimals
-- Fiat currencies and payout platforms: read live from `@zkp2p/cash`
-- Pricing: 0% protocol spread, live oracle rate at fill time
+- Fiat currencies and payout platforms: from the bundled Cash version’s capability catalog
+- Pricing: 0% protocol spread, oracle rate at intent signal
 - Countries: Peer exposes availability by payout platform and currency rather than by country, so `getSupportedCountries()` returns an empty list instead of inventing a country gate
-- Runtime: browser and Node.js 20.19+
+- Runtime: browser or Node.js 22+ (required by the Cash dependency)
 
 ## Configuration
 
